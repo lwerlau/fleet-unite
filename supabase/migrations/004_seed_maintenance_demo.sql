@@ -1,0 +1,73 @@
+-- Seed Demo Maintenance Data for Testing
+-- Run this AFTER creating equipment and getting equipment IDs
+-- 
+-- To use this:
+-- 1. Sign up in the app and add equipment
+-- 2. Go to Supabase Dashboard → Table Editor → equipment
+-- 3. Copy your equipment ID (UUID)
+-- 4. Replace 'EQUIPMENT_ID_HERE' below with your actual equipment ID
+-- 5. Run this SQL in Supabase SQL Editor
+
+-- Example: Replace EQUIPMENT_ID_HERE with actual equipment ID
+-- INSERT INTO public.maintenance_events (
+--   equipment_id,
+--   type,
+--   date,
+--   cost,
+--   mileage_at_service,
+--   hours_at_service,
+--   notes
+-- )
+-- VALUES
+--   (
+--     'EQUIPMENT_ID_HERE',
+--     'Oil Change',
+--     CURRENT_DATE - INTERVAL '30 days',
+--     75.00,
+--     115000,
+--     NULL,
+--     'Standard oil and filter change'
+--   ),
+--   (
+--     'EQUIPMENT_ID_HERE',
+--     'Tire Rotation',
+--     CURRENT_DATE - INTERVAL '60 days',
+--     60.00,
+--     112000,
+--     NULL,
+--     'Rotated all four tires'
+--   ),
+--   (
+--     'EQUIPMENT_ID_HERE',
+--     'Brake Service',
+--     CURRENT_DATE - INTERVAL '90 days',
+--     320.00,
+--     110000,
+--     NULL,
+--     'Replaced brake pads and rotors'
+--   );
+
+-- Alternative: Insert for all equipment of a user
+-- DO $$
+-- DECLARE
+--     v_equipment_id UUID;
+-- BEGIN
+--     -- Get first equipment (or replace with specific equipment ID)
+--     SELECT id INTO v_equipment_id FROM public.equipment LIMIT 1;
+--     
+--     -- Insert demo maintenance events
+--     INSERT INTO public.maintenance_events (
+--         equipment_id,
+--         type,
+--         date,
+--         cost,
+--         mileage_at_service,
+--         notes
+--     )
+--     VALUES
+--         (v_equipment_id, 'Oil Change', CURRENT_DATE - INTERVAL '30 days', 75.00, 115000, 'Standard oil change'),
+--         (v_equipment_id, 'Tire Rotation', CURRENT_DATE - INTERVAL '60 days', 60.00, 112000, 'Rotated tires'),
+--         (v_equipment_id, 'Brake Service', CURRENT_DATE - INTERVAL '90 days', 320.00, 110000, 'Brake service')
+--     ON CONFLICT DO NOTHING;
+-- END $$;
+
