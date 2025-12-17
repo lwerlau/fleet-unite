@@ -1,13 +1,19 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import { Truck, Plus, AlertCircle, CheckCircle, Clock } from 'lucide-react'
+import { fetchEquipment, fetchMaintenanceSchedules, calculateEquipmentStatus, createEquipment } from '../lib/equipment'
+import EquipmentGrid from '../components/equipment/EquipmentGrid'
+import EmptyState from '../components/equipment/EmptyState'
+import AddEquipmentModal from '../components/equipment/AddEquipmentModal'
 
 export default function Dashboard() {
   const { user } = useAuth()
   const [equipment, setEquipment] = useState([])
+  const [schedules, setSchedules] = useState([])
   const [loading, setLoading] = useState(true)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState(null)
   const [stats, setStats] = useState({
     total: 0,
     dueSoon: 0,
@@ -17,59 +23,86 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (user) {
-      fetchEquipment()
+      loadEquipment()
     }
   }, [user])
 
-  const fetchEquipment = async () => {
+  const loadEquipment = async () => {
+    setLoading(true)
+    setError(null)
+    
     try {
-      const { data, error } = await supabase
-        .from('equipment')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
-
-      if (error) throw error
-
-      setEquipment(data || [])
+      // Fetch equipment
+      const { data: equipmentData, error: equipmentError } = await fetchEquipment(user.id)
       
-      // Calculate stats (simplified for now - will enhance with maintenance data)
-      setStats({
-        total: data?.length || 0,
-        dueSoon: 0, // Will calculate based on maintenance schedules
-        overdue: 0, // Will calculate based on maintenance schedules
-        good: data?.length || 0,
-      })
-    } catch (error) {
-      console.error('Error fetching equipment:', error)
+      if (equipmentError) throw equipmentError
+
+      setEquipment(equipmentData || [])
+
+      // Fetch maintenance schedules if we have equipment
+      let schedulesData = []
+      if (equipmentData && equipmentData.length > 0) {
+        const equipmentIds = equipmentData.map((eq) => eq.id)
+        const { data } = await fetchMaintenanceSchedules(equipmentIds)
+        schedulesData = data || []
+        setSchedules(schedulesData)
+      } else {
+        setSchedules([])
+      }
+
+      // Calculate stats
+      calculateStats(equipmentData || [], schedulesData)
+    } catch (err) {
+      console.error('Error loading equipment:', err)
+      setError(err.message || 'Failed to load equipment')
     } finally {
       setLoading(false)
     }
   }
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'overdue':
-        return 'bg-red-100 text-red-800 border-red-200'
-      case 'due_soon':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200'
-      case 'good':
-        return 'bg-green-100 text-green-800 border-green-200'
-      default:
-        return 'bg-gray-100 text-gray-800 border-gray-200'
-    }
+  const calculateStats = (equipmentList, schedulesList) => {
+    let dueSoon = 0
+    let overdue = 0
+    let good = 0
+
+    equipmentList.forEach((eq) => {
+      const status = calculateEquipmentStatus(eq, schedulesList)
+      if (status === 'overdue') overdue++
+      else if (status === 'due_soon') dueSoon++
+      else good++
+    })
+
+    setStats({
+      total: equipmentList.length,
+      dueSoon,
+      overdue,
+      good,
+    })
   }
 
-  const getStatusIcon = (status) => {
-    switch (status) {
-      case 'overdue':
-        return <AlertCircle className="h-5 w-5" />
-      case 'due_soon':
-        return <Clock className="h-5 w-5" />
-      case 'good':
-        return <CheckCircle className="h-5 w-5" />
-      default:
-        return null
+  const getStatusForEquipment = (eq) => {
+    return calculateEquipmentStatus(eq, schedules)
+  }
+
+  const handleAddEquipment = async (equipmentData) => {
+    setIsSubmitting(true)
+    setError(null)
+
+    try {
+      const { data, error: createError } = await createEquipment(user.id, equipmentData)
+
+      if (createError) throw createError
+
+      // Refresh equipment list
+      await loadEquipment()
+
+      // Close modal
+      setIsModalOpen(false)
+    } catch (err) {
+      console.error('Error adding equipment:', err)
+      setError(err.message || 'Failed to add equipment')
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -88,6 +121,13 @@ export default function Dashboard() {
         <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
         <p className="mt-2 text-gray-600">Overview of your equipment fleet</p>
       </div>
+
+      {/* Error Message */}
+      {error && (
+        <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+          {error}
+        </div>
+      )}
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
@@ -140,68 +180,43 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Equipment List */}
+      {/* Equipment Section */}
       <div className="card">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-semibold text-gray-900">Your Equipment</h2>
-          <Link
-            to="/equipment/new"
+          <button
+            onClick={() => setIsModalOpen(true)}
             className="btn-primary flex items-center"
           >
             <Plus className="h-5 w-5 mr-2" />
-            Add Equipment
-          </Link>
+            <span className="hidden sm:inline">Add Equipment</span>
+            <span className="sm:hidden">Add</span>
+          </button>
         </div>
 
         {equipment.length === 0 ? (
-          <div className="text-center py-12">
-            <Truck className="mx-auto h-12 w-12 text-gray-400" />
-            <h3 className="mt-2 text-sm font-medium text-gray-900">No equipment</h3>
-            <p className="mt-1 text-sm text-gray-500">
-              Get started by adding your first piece of equipment.
-            </p>
-            <div className="mt-6">
-              <Link to="/equipment/new" className="btn-primary inline-flex items-center">
-                <Plus className="h-5 w-5 mr-2" />
-                Add Equipment
-              </Link>
-            </div>
-          </div>
+          <EmptyState onAddClick={() => setIsModalOpen(true)} />
         ) : (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {equipment.map((item) => (
-              <Link
-                key={item.id}
-                to={`/equipment/${item.id}`}
-                className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
-              >
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <h3 className="text-lg font-semibold text-gray-900">{item.name}</h3>
-                    <p className="text-sm text-gray-500 mt-1">{item.type}</p>
-                    <div className="mt-3 space-y-1">
-                      {item.mileage && (
-                        <p className="text-sm text-gray-600">
-                          Mileage: {item.mileage.toLocaleString()} miles
-                        </p>
-                      )}
-                      {item.hours && (
-                        <p className="text-sm text-gray-600">
-                          Hours: {item.hours.toLocaleString()} hrs
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                  <div className={`ml-4 px-2 py-1 rounded-full border flex items-center ${getStatusColor('good')}`}>
-                    {getStatusIcon('good')}
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
+          <EquipmentGrid equipment={equipment} getStatus={getStatusForEquipment} />
         )}
       </div>
+
+      {/* Floating Action Button (Mobile) */}
+      <button
+        onClick={() => setIsModalOpen(true)}
+        className="fixed bottom-20 right-4 lg:hidden h-14 w-14 bg-primary-600 text-white rounded-full shadow-lg hover:bg-primary-700 transition-colors flex items-center justify-center z-40"
+        aria-label="Add Equipment"
+      >
+        <Plus className="h-6 w-6" />
+      </button>
+
+      {/* Add Equipment Modal */}
+      <AddEquipmentModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleAddEquipment}
+        loading={isSubmitting}
+      />
     </div>
   )
 }
-

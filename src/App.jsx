@@ -6,6 +6,7 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Dashboard from './pages/Dashboard'
 import Equipment from './pages/Equipment'
+import EquipmentDetail from './pages/EquipmentDetail'
 import Maintenance from './pages/Maintenance'
 import Analytics from './pages/Analytics'
 
@@ -32,6 +33,16 @@ function App() {
               <ProtectedRoute>
                 <Layout>
                   <Equipment />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/equipment/:id"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <EquipmentDetail />
                 </Layout>
               </ProtectedRoute>
             }

@@ -74,3 +74,4 @@ FROM public.equipment e
 WHERE e.name = 'Ford F-250';
 */
 
+

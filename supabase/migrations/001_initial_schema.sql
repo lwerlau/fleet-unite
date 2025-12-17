@@ -216,3 +216,4 @@ CREATE TRIGGER update_maintenance_events_updated_at BEFORE UPDATE ON public.main
 CREATE TRIGGER update_maintenance_schedules_updated_at BEFORE UPDATE ON public.maintenance_schedules
   FOR EACH ROW EXECUTE FUNCTION public.update_updated_at_column();
 
+
