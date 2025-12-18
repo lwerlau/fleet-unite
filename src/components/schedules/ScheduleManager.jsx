@@ -95,7 +95,7 @@ export default function ScheduleManager({
     return (
       <div className="card">
         <div className="flex items-center justify-center py-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
         </div>
       </div>
     )
@@ -107,20 +107,20 @@ export default function ScheduleManager({
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold text-gray-900 flex items-center">
-            <Calendar className="h-5 w-5 mr-2 text-primary-600" />
+            <Calendar className="h-5 w-5 mr-2 text-gray-900" />
             Maintenance Schedules
           </h2>
         </div>
 
         {usagePatterns && usagePatterns.confidence !== 'low' && (
-          <div className="card bg-blue-50 border-blue-200 mb-4">
+          <div className="card bg-gray-50 border-gray-200 mb-4">
             <div className="flex items-start gap-3">
-              <TrendingUp className="h-5 w-5 text-blue-600 mt-0.5" />
+              <TrendingUp className="h-5 w-5 text-gray-900 mt-0.5" />
               <div className="flex-1">
-                <p className="text-sm font-medium text-blue-900">
+                <p className="text-sm font-medium text-gray-900">
                   Smart Usage Detection Active
                 </p>
-                <p className="text-xs text-blue-700 mt-1">
+                <p className="text-xs text-gray-700 mt-1">
                   {equipment.mileage !== null &&
                     equipment.mileage !== undefined && (
                       <span>
@@ -137,7 +137,7 @@ export default function ScheduleManager({
                   {' • '}
                   Confidence: {usagePatterns.confidence}
                 </p>
-                <p className="text-xs text-blue-600 mt-1">
+                <p className="text-xs text-gray-600 mt-1">
                   Next maintenance dates are calculated based on your actual usage patterns.
                 </p>
               </div>

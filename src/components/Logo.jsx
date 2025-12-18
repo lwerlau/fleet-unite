@@ -3,14 +3,14 @@ import { Link } from 'react-router-dom'
 export default function Logo({ className = "", linkTo = "/dashboard" }) {
   const logoContent = (
     <>
-      {/* Logo Image - Use exact design from image, color changed to black */}
+      {/* PNG logo - bigger size, centered */}
       <img 
-        src="/logo.svg" 
+        src="/logo.png" 
         alt="FleetUnite Logo" 
-        width="40" 
-        height="40" 
-        className="flex-shrink-0"
-        style={{ filter: 'brightness(0)' }} // Convert to black
+        className="h-14 w-auto object-contain flex-shrink-0"
+        style={{
+          mixBlendMode: 'multiply'
+        }}
       />
       
       {/* FleetUnite Text */}
@@ -23,7 +23,7 @@ export default function Logo({ className = "", linkTo = "/dashboard" }) {
   // If linkTo is null, render without link (for login/signup pages)
   if (linkTo === null) {
     return (
-      <div className={`flex items-center gap-3 ${className}`}>
+      <div className={`flex items-center gap-1 ${className}`}>
         {logoContent}
       </div>
     )
@@ -32,7 +32,7 @@ export default function Logo({ className = "", linkTo = "/dashboard" }) {
   return (
     <Link 
       to={linkTo} 
-      className={`flex items-center gap-3 hover:opacity-80 transition ${className}`}
+      className={`flex items-center gap-1 hover:opacity-80 transition ${className}`}
     >
       {logoContent}
     </Link>

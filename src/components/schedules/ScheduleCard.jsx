@@ -111,7 +111,7 @@ export default function ScheduleCard({
               type="checkbox"
               checked={isEnabled}
               onChange={(e) => setIsEnabled(e.target.checked)}
-              className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+              className="h-4 w-4 text-gray-900 focus:ring-gray-900 border-gray-300 rounded"
             />
             <h3 className="text-lg font-semibold text-gray-900">
               {scheduleType.type}

@@ -9,6 +9,7 @@ import Equipment from './pages/Equipment'
 import EquipmentDetail from './pages/EquipmentDetail'
 import Maintenance from './pages/Maintenance'
 import Analytics from './pages/Analytics'
+import DemoData from './pages/DemoData'
 
 function App() {
   return (
@@ -17,6 +18,16 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route
+            path="/demo"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <DemoData />
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/dashboard"
             element={

@@ -54,7 +54,7 @@ export default function MaintenanceHistoryItem({
         <div className="flex gap-2 ml-4">
           <button
             onClick={() => onEdit(maintenance)}
-            className="p-2 text-gray-400 hover:text-primary-600 transition-colors"
+            className="p-2 text-gray-400 hover:text-gray-900 transition-colors"
             aria-label="Edit maintenance"
           >
             <Edit className="h-4 w-4" />

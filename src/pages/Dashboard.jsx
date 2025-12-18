@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { Truck, Plus, AlertCircle, CheckCircle, Clock } from 'lucide-react'
 import { fetchEquipment, fetchMaintenanceSchedules, calculateEquipmentStatus, createEquipment } from '../lib/equipment'
@@ -109,7 +110,7 @@ export default function Dashboard() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
       </div>
     )
   }
@@ -118,8 +119,20 @@ export default function Dashboard() {
     <div>
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-        <p className="mt-2 text-gray-600">Overview of your equipment fleet</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+            <p className="mt-2 text-gray-600">Overview of your equipment fleet</p>
+          </div>
+          {equipment.length === 0 && (
+            <Link
+              to="/demo"
+              className="btn-secondary text-sm"
+            >
+              Generate Demo Data
+            </Link>
+          )}
+        </div>
       </div>
 
       {/* Error Message */}
@@ -134,7 +147,7 @@ export default function Dashboard() {
         <div className="card">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <Truck className="h-8 w-8 text-primary-600" />
+              <Truck className="h-8 w-8 text-gray-900" />
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-500">Total Equipment</p>
@@ -204,7 +217,7 @@ export default function Dashboard() {
       {/* Floating Action Button (Mobile) */}
       <button
         onClick={() => setIsModalOpen(true)}
-        className="fixed bottom-20 right-4 lg:hidden h-14 w-14 bg-primary-600 text-white rounded-full shadow-lg hover:bg-primary-700 transition-colors flex items-center justify-center z-40"
+        className="fixed bottom-20 right-4 lg:hidden h-14 w-14 bg-gray-900 text-white rounded-full shadow-lg hover:bg-gray-800 transition-colors flex items-center justify-center z-40"
         aria-label="Add Equipment"
       >
         <Plus className="h-6 w-6" />

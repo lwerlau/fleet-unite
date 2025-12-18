@@ -113,7 +113,7 @@ export default function EquipmentDetail() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
       </div>
     )
   }
@@ -123,7 +123,7 @@ export default function EquipmentDetail() {
       <div>
         <button
           onClick={() => navigate('/dashboard')}
-          className="mb-4 text-primary-600 hover:text-primary-700 flex items-center"
+          className="mb-4 text-gray-900 hover:text-gray-700 flex items-center"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Dashboard
@@ -144,7 +144,7 @@ export default function EquipmentDetail() {
       {/* Back Button */}
       <button
         onClick={() => navigate('/dashboard')}
-        className="mb-4 text-primary-600 hover:text-primary-700 flex items-center"
+        className="mb-4 text-gray-900 hover:text-gray-700 flex items-center"
       >
         <ArrowLeft className="h-4 w-4 mr-2" />
         Back to Dashboard
@@ -244,7 +244,7 @@ export default function EquipmentDetail() {
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold text-gray-900 flex items-center">
-            <Wrench className="h-5 w-5 mr-2 text-primary-600" />
+            <Wrench className="h-5 w-5 mr-2 text-gray-900" />
             Maintenance History
           </h2>
           <button
@@ -259,7 +259,7 @@ export default function EquipmentDetail() {
         {maintenanceLoading ? (
           <div className="card">
             <div className="flex items-center justify-center py-8">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
             </div>
           </div>
         ) : (

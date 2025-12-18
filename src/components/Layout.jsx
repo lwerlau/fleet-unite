@@ -43,7 +43,7 @@ export default function Layout({ children }) {
                   to="/dashboard"
                   className={`flex items-center px-4 py-2 text-sm font-medium rounded-lg ${
                     isActive('/dashboard')
-                      ? 'bg-primary-50 text-primary-700'
+                      ? 'bg-gray-100 text-gray-900'
                       : 'text-gray-700 hover:bg-gray-50'
                   }`}
                 >
@@ -54,7 +54,7 @@ export default function Layout({ children }) {
                   to="/equipment"
                   className={`flex items-center px-4 py-2 text-sm font-medium rounded-lg ${
                     isActive('/equipment')
-                      ? 'bg-primary-50 text-primary-700'
+                      ? 'bg-gray-100 text-gray-900'
                       : 'text-gray-700 hover:bg-gray-50'
                   }`}
                 >
@@ -65,7 +65,7 @@ export default function Layout({ children }) {
                   to="/maintenance"
                   className={`flex items-center px-4 py-2 text-sm font-medium rounded-lg ${
                     isActive('/maintenance')
-                      ? 'bg-primary-50 text-primary-700'
+                      ? 'bg-gray-100 text-gray-900'
                       : 'text-gray-700 hover:bg-gray-50'
                   }`}
                 >
@@ -76,7 +76,7 @@ export default function Layout({ children }) {
                   to="/analytics"
                   className={`flex items-center px-4 py-2 text-sm font-medium rounded-lg ${
                     isActive('/analytics')
-                      ? 'bg-primary-50 text-primary-700'
+                      ? 'bg-gray-100 text-gray-900'
                       : 'text-gray-700 hover:bg-gray-50'
                   }`}
                 >
@@ -87,8 +87,8 @@ export default function Layout({ children }) {
               <div className="px-4 py-4 border-t border-gray-200">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
-                    <div className="h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center">
-                      <span className="text-primary-600 font-medium">
+                    <div className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center">
+                      <span className="text-gray-900 font-medium">
                         {user?.user_metadata?.name?.charAt(0) || user?.email?.charAt(0) || 'U'}
                       </span>
                     </div>
@@ -119,7 +119,7 @@ export default function Layout({ children }) {
           <Link
             to="/dashboard"
             className={`flex flex-col items-center py-2 ${
-              isActive('/dashboard') ? 'text-primary-600' : 'text-gray-600'
+              isActive('/dashboard') ? 'text-gray-900' : 'text-gray-600'
             }`}
           >
             <LayoutDashboard className="h-5 w-5" />
@@ -128,7 +128,7 @@ export default function Layout({ children }) {
           <Link
             to="/equipment"
             className={`flex flex-col items-center py-2 ${
-              isActive('/equipment') ? 'text-primary-600' : 'text-gray-600'
+              isActive('/equipment') ? 'text-gray-900' : 'text-gray-600'
             }`}
           >
             <Truck className="h-5 w-5" />
@@ -137,7 +137,7 @@ export default function Layout({ children }) {
           <Link
             to="/maintenance"
             className={`flex flex-col items-center py-2 ${
-              isActive('/maintenance') ? 'text-primary-600' : 'text-gray-600'
+              isActive('/maintenance') ? 'text-gray-900' : 'text-gray-600'
             }`}
           >
             <Wrench className="h-5 w-5" />
@@ -146,7 +146,7 @@ export default function Layout({ children }) {
           <Link
             to="/analytics"
             className={`flex flex-col items-center py-2 ${
-              isActive('/analytics') ? 'text-primary-600' : 'text-gray-600'
+              isActive('/analytics') ? 'text-gray-900' : 'text-gray-600'
             }`}
           >
             <BarChart3 className="h-5 w-5" />
