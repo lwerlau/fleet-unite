@@ -1,6 +1,7 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { Truck, LogOut, LayoutDashboard, Wrench, BarChart3 } from 'lucide-react'
+import Logo from './Logo'
 
 export default function Layout({ children }) {
   const { user, signOut } = useAuth()
@@ -19,9 +20,7 @@ export default function Layout({ children }) {
       {/* Mobile Header */}
       <header className="bg-white border-b border-gray-200 lg:hidden">
         <div className="px-4 py-3 flex items-center justify-between">
-          <Link to="/dashboard" className="text-2xl font-bold text-primary-600">
-            Fleet Unite
-          </Link>
+          <Logo />
           <button
             onClick={handleSignOut}
             className="p-2 text-gray-600 hover:text-gray-900"
@@ -36,7 +35,7 @@ export default function Layout({ children }) {
         <div className="flex flex-col w-64">
           <div className="flex flex-col flex-grow bg-white border-r border-gray-200 pt-5 pb-4 overflow-y-auto">
             <div className="flex items-center flex-shrink-0 px-4">
-              <h1 className="text-2xl font-bold text-primary-600">Fleet Unite</h1>
+              <Logo />
             </div>
             <div className="mt-8 flex-grow flex flex-col">
               <nav className="flex-1 px-2 space-y-1">

@@ -3,10 +3,11 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { fetchEquipment, deleteEquipment } from '../lib/equipment'
 import { fetchMaintenanceHistory, logMaintenance } from '../lib/maintenance'
-import { ArrowLeft, Edit, Trash2, Truck, Gauge, Calendar, Plus, Wrench } from 'lucide-react'
+import { ArrowLeft, Trash2, Truck, Gauge, Calendar, Plus, Wrench } from 'lucide-react'
 import { format } from 'date-fns'
 import MaintenanceHistory from '../components/maintenance/MaintenanceHistory'
 import LogMaintenanceModal from '../components/maintenance/LogMaintenanceModal'
+import ScheduleManager from '../components/schedules/ScheduleManager'
 
 export default function EquipmentDetail() {
   const { id } = useParams()
@@ -164,13 +165,7 @@ export default function EquipmentDetail() {
             <p className="text-lg text-gray-600">{equipment.type}</p>
           </div>
           <div className="flex gap-2">
-            <button
-              onClick={() => navigate(`/equipment/${id}/edit`)}
-              className="btn-secondary flex items-center"
-            >
-              <Edit className="h-4 w-4 mr-2" />
-              Edit
-            </button>
+            {/* Edit button removed for MVP - users can delete and re-add if needed */}
             <button
               onClick={() => setShowDeleteConfirm(true)}
               className="btn-secondary text-red-600 hover:bg-red-50 flex items-center"
@@ -233,7 +228,19 @@ export default function EquipmentDetail() {
         )}
       </div>
 
-      {/* Maintenance Section */}
+      {/* Maintenance Schedules Section */}
+      <div className="mb-6">
+        <ScheduleManager
+          equipment={equipment}
+          maintenanceHistory={maintenanceHistory}
+          onSchedulesChange={() => {
+            // Refresh maintenance history to update status indicators
+            loadMaintenanceHistory()
+          }}
+        />
+      </div>
+
+      {/* Maintenance History Section */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold text-gray-900 flex items-center">
